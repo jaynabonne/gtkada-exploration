@@ -1,0 +1,12 @@
+name = "gtk_experiment"
+description = ""
+version = "0.1.0-dev"
+
+authors = ["Jay Nabonne"]
+maintainers = ["Jay Nabonne <jaynabonne@gmail.com>"]
+licenses = "MIT"
+website = ""
+tags = []
+
+[[depends-on]]
+gtkada = "^24.0.0"
