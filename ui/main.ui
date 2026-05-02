@@ -1,0 +1,39 @@
+<interface>
+
+  <object class="GtkWindow" id="main_window">
+    <child>
+
+      <object class="GtkBox" id="main_box">
+        <property name="orientation">vertical</property>
+
+        <child>
+          <object class="GtkMenuBar" id="main_menu">
+            <child>
+              <object class="GtkMenuItem" id="file_menu_item">
+                <property name="label" translatable="yes">File</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="file_menu">
+                    <child>
+                      <object class="GtkMenuItem" id="quit_item">
+                        <property name="label" translatable="yes">Quit</property>
+                        <signal name="activate" handler="on_quit_activate"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkBox" id="content_box">
+          </object>
+        </child>
+
+      </object>
+    </child>
+
+  </object>
+
+</interface>

@@ -16,11 +16,12 @@ with Ada.Text_IO; use Ada.Text_IO;
 
 procedure Gtk_Experiment is
 
-   Win   : Gtk_Window;
-
    Builder : Gtk_Builder;     
    Error: aliased GError;
    Result : Guint;
+
+   Win   : Gtk_Window;
+   Box   : Gtk_Box;
    MenuBar  : Gtk_Menu_Bar;
 --   FileItem : Gtk_Menu_Item;
 --   FileMenu : Gtk_Menu;
@@ -28,7 +29,6 @@ procedure Gtk_Experiment is
 
    Label : Gtk_Label;
    Label2 : Gtk_Label;
-   Box   : Gtk_Vbox;
 
    function Delete_Event_Cb
      (Self  : access Gtk_Widget_Record'Class;
@@ -55,7 +55,7 @@ begin
    Gtk.Main.Init;
 
    Builder := Gtk_Builder_New;
-   Result := Add_From_File (Builder, "ui/main.glade", Error'Access);
+   Result := Add_From_File (Builder, "ui/main.ui", Error'Access);
    if Error /= null then
       Put_Line ("Failed to load UI file: " & Get_Message (Error));
       return;
@@ -63,7 +63,7 @@ begin
 
    --  Create a window with a size of 400x400
    Win := Gtk_Window (Get_Object (Builder, "main_window"));
-   Box := Gtk_Vbox (Get_Object (Builder, "main_box"));
+   Box := Gtk_Box (Get_Object (Builder, "main_box"));
    MenuBar := Gtk_Menu_Bar (Get_Object (Builder, "main_menu"));
    
    Win.Set_Default_Size (400, 400);
