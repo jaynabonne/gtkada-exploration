@@ -2,7 +2,7 @@ with "gtkada";
 
 project Gtk_Experiment is
 
-   for Source_Dirs use ("src");
+   for Source_Dirs use ("src", "ui");
    for Object_Dir use "obj";
    for Main use ("gtk_experiment.adb");
 

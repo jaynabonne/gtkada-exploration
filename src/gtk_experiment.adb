@@ -1,4 +1,5 @@
 with Gdk.Event;       use Gdk.Event;
+with Gtk.Handlers;
 
 with Gtk.Box;         use Gtk.Box;
 with Gtk.Builder;     use Gtk.Builder;
@@ -8,14 +9,19 @@ with Gtk.Menu_Bar;    use Gtk.Menu_Bar;
 with Gtk.Menu;        use Gtk.Menu;
 with Gtk.Menu_Item;   use Gtk.Menu_Item;
 with Gtk.Main;
+with Gtk.Toolbar;    use Gtk.Toolbar;
 with Gtk.Window;      use Gtk.Window;
 with Glib.Error;      use Glib.Error;
 with Glib; use Glib;
 
 with Ada.Text_IO; use Ada.Text_IO;
 
-procedure Gtk_Experiment is
+with Callback_Types;
+with Menu_Handlers;
 
+
+procedure Gtk_Experiment is
+  
    Builder : Gtk_Builder;     
    Error: aliased GError;
    Result : Guint;
@@ -23,9 +29,8 @@ procedure Gtk_Experiment is
    Win   : Gtk_Window;
    Box   : Gtk_Box;
    MenuBar  : Gtk_Menu_Bar;
---   FileItem : Gtk_Menu_Item;
---   FileMenu : Gtk_Menu;
---   QuitItem : Gtk_Menu_Item;
+   Toolbar : Gtk_Toolbar;
+   QuitItem : Gtk_Menu_Item;
 
    Label : Gtk_Label;
    Label2 : Gtk_Label;
@@ -34,7 +39,7 @@ procedure Gtk_Experiment is
      (Self  : access Gtk_Widget_Record'Class;
       Event : Gdk.Event.Gdk_Event)
       return Boolean;
-
+   
    ---------------------
    -- Delete_Event_Cb --
    ---------------------
@@ -65,6 +70,32 @@ begin
    Win := Gtk_Window (Get_Object (Builder, "main_window"));
    Box := Gtk_Box (Get_Object (Builder, "main_box"));
    MenuBar := Gtk_Menu_Bar (Get_Object (Builder, "main_menu"));
+   
+   Result := Add_From_File (Builder, "ui/toolbar.ui", Error'Access);
+   if Error /= null then
+      Put_Line ("Failed to load UI file: " & Get_Message (Error));
+      return;
+   end if;
+
+   Toolbar := Gtk_Toolbar (Get_Object (Builder, "main_toolbar"));
+   
+   Pack_Start
+     (Box,
+      Toolbar,
+      Expand  => False,
+      Fill    => False,
+      Padding => 0);
+
+   Reorder_Child
+     (Box,
+      Toolbar,
+      Position => 1);
+   
+   QuitItem := Gtk_Menu_Item (Get_Object (Builder, "quit_item"));
+   Callback_Types.Menu_Item_Callbacks.Connect
+     (QuitItem,
+      "activate",
+      Callback_Types.Menu_Item_Callbacks.To_Marshaller (Menu_Handlers.On_Quit'Access));
    
    Win.Set_Default_Size (400, 400);
   
